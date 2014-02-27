@@ -1,0 +1,10 @@
+.idea
+.tmp
+src
+dev
+.sass-cache
+node_modules
+proj-conf.json
+gruntfile_casper.js
+gruntfile_simple.coffee
+grunt_simple

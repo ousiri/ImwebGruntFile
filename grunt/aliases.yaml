@@ -1,0 +1,12 @@
+default:
+  - 'dev'
+dev:
+  - 'clean:dev'
+  - 'compass:dev'
+  - 'copy:dev'
+  - 'templates:dev'
+  - 'doUsemin:dev'
+  #- 'useminPrepare:dev'
+  - 'concat'
+  - 'notify:copy'
+  - 'watch'
