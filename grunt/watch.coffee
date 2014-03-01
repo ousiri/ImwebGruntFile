@@ -16,25 +16,24 @@ module.exports = (grunt)->
     #if target == 'compass'
       #return
     #destPath = '<%=ref.dev%>'
-    ref =  grunt.config.get 'ref'
-    destPath = filePath.replace ref.src, ref.dev
-    if action == 'deleted'
-      if grunt.file.exists destPath
-        grunt.file.delete destPath
-    else
-      if grunt.file.isDir filePath
-        copyDir filePath, destPath
-      else
-        grunt.file.copy filePath, destPath
     if target == 'compass'
       grunt.task.run ['compass:dev']
+    if target == 'template'
+      grunt.task.run ['templates:dev']
+    if target == 'html' or target == 'static'
+      ref =  grunt.config.get 'ref'
+      destPath = filePath.replace ref.src, ref.dev
+      if action == 'deleted'
+        if grunt.file.exists destPath
+          grunt.file.delete destPath
+      else
+        if grunt.file.isDir filePath
+          copyDir filePath, destPath
+        else
+          grunt.file.copy filePath, destPath
     if target == 'html'
       grunt.task.run ['doUsemin:dev']
-    if target == 'template'
-      console.log grunt.file.read filePath
-      grunt.task.run ['templates:dev']
-    #if target == 'main'
-    #  grunt.task.run ['concat']
+    grunt.task.run ['concat']
 
   options:
     spawn: false
@@ -44,7 +43,9 @@ module.exports = (grunt)->
     #tasks: ['compass:dev']
   html:
     files: ['**/*.html', '!template/**/*.html']
+  static:
+    files: ['**/*.{js,css,jpg,jpeg,bmp,png,gif,ico}']
   template:
     files: ['template/**/*.html']
-  main:
-    files: ['**/*.*']
+  #main:
+  #  files: ['**/*.*']
