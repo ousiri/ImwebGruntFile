@@ -11,10 +11,6 @@ module.exports = (grunt)->
       namespace: 'JST'
       processName: (filename)->
         path.basename filename, '.html'
-    dev:
-      files: {}
-    dist:
-      files: {}
 
 
   require('time-grunt')(grunt)

@@ -6,7 +6,7 @@ module.exports = (grunt)->
     useminConfig =
       options:
         dest: ref[env]
-      html: ["#{ref[env]}/**/*.html"]
+      html: ["#{if env=='dev' then ref[env] else ref['tmp']}/**/*.html"]
     console.log 'useminConfig: ', useminConfig
 
     grunt.task.loadNpmTasks 'casper-usemin-tmp'

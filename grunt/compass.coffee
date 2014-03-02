@@ -1,6 +1,10 @@
 module.exports =
+  options:
+    outputStyle: 'expanded'
+    sassDir: '<%=ref.src%>'
   dev:
     options:
-      outputStyle: 'expanded'
-      sassDir: '<%=ref.src%>'
       cssDir: '<%=ref.dev%>'
+  tmp:
+    options:
+      cssDir: '<%=ref.tmp%>'

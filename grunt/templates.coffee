@@ -6,8 +6,8 @@ module.exports = (grunt)->
     ref = grunt.config.get 'ref'
     #console.log grunt.config.get 'tmplInline'
     srcPath = ref.src+'/template/'
-    devPath = ref.dev+'/js/template/'
-    tplConfig = grunt.config.get 'tmplInline'
+    devPath = ref[env]+'/js/template/'
+    tplConfig = grunt.config.get('tmplInline') or {}
     if grunt.file.exists srcPath
       if grunt.file.exists devPath
         grunt.config.set 'clean.template', [devPath]
@@ -19,10 +19,13 @@ module.exports = (grunt)->
         devPath = "#{devPath}/#{devName}.js"
         if not tplConfig[devPath]
           srcPath = "#{srcPath}/#{subDir||''}/*.html"
+          if not tplConfig[env]
+            tplConfig[env] = {files:{}}
           tplConfig[env].files[devPath] = [srcPath]
           hasTemplateFile = true
+      console.log tplConfig
       if hasTemplateFile
         grunt.task.loadNpmTasks 'grunt-imweb-tpl-complie'
         grunt.config.set 'tplComplie', tplConfig
-        grunt.task.run ['tplComplie:dev']
+        grunt.task.run ['tplComplie:'+env]
   {}
