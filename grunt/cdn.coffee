@@ -1,0 +1,78 @@
+module.exports = (grunt)->
+  fs = require 'fs'
+  path = require 'path'
+
+  regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
+  regCss = /url\(([^)]+)\)/ig
+
+  supportedTypes =
+    html: 'html',
+    css: 'css'
+
+  fileMap = {}
+
+  processHtml = (content, filePath, options)->
+    imgCdn = options.imgCdn or options.cdn
+    jsCdn = options.jsCdn or options.cdn
+    cssCdn = options.cssCdn or options.cdn
+    if imgCdn and jsCdn and cssCdn
+      content = content.replace(regHtml, (matchedWord, src)->
+        type = path.extname(src).replace(/^\./, '')
+        if type=='js'
+          cdn = jsCdn
+        else if type=='css'
+          cdn = cssCdn
+        else if type.match /^(png|jpg|jpeg|gif)$/
+          cdn = imgCdn
+        matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
+      ).replace(regCss, (matchedWord, src)->
+        if src.match /\+/ #skip js script, it's just convenient
+          console.log 'skipping', matchedWord
+          matchedWord
+        else
+          matchedWord.replace src, cdnUrl.call(@, src, filePath, imgCdn);
+      )
+    content
+
+  processCss = (content, filePath, options) ->
+    cdn = options.imgCdn or options.cdn
+    if cdn
+      content = content.replace regCss, (matchedWord, src)->
+        matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
+    content
+
+  cdnUrl = (src, filePath, cdn)->
+    if src.match(/^https?:\/\//i) or src.match(/^\/\//) or src.match(/^data:/i)
+      console.log 'Skipping due to', src, 'matches absolute url'
+      return src
+    relative = path.join path.dirname(filePath), src
+    #console.log 'cdnUrl: ', filePath, src, relative, fileMap[relative]
+    # todo fix usemin bug
+    p = path.join(cdn, fileMap[relative] or relative).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1')
+    console.log 'found a match:', src, '\t\t\t\t', p
+    p
+
+  grunt.task.registerMultiTask 'cdn', ()->
+    options = @options()
+    files = @filesSrc
+    fileMap = grunt.config.get 'md5Map'
+    files.forEach (filePath)=>
+      type = path.extname(filePath).replace /^./, ''
+      if not supportedTypes[type]
+        return
+      content = grunt.file.read(filePath).toString()
+      rFilePath = path.relative options.parentDir, filePath
+      if supportedTypes[type] == 'html'
+        content = processHtml.call @, content, rFilePath, options
+      else if supportedTypes[type] == 'css'
+        content = processCss.call @, content, rFilePath, options
+      grunt.file.write filePath, content
+
+  dist:
+    options:
+      cdn: 'http://test.cdn.com/test/'
+      imgCdn: 'http://3.cdn.com/test/'
+      jsCdn: 'http://1.cdn.com/test/'
+      cssCdn: 'http://1.cdn.com/test/'
+      parentDir: '<%=ref.dist%>'
+    src: ['<%=ref.dist%>**/*.*']

@@ -15,6 +15,7 @@
     "casper-usemin-tmp": "0.0.23",
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-inline": "~0.2.2"
+    "grunt-inline": "~0.2.2",
+    "MD5": "~1.2.0"
   }
 }

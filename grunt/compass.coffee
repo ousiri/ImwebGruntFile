@@ -1,10 +1,12 @@
 module.exports =
   options:
-    outputStyle: 'expanded'
     sassDir: '<%=ref.src%>'
   dev:
     options:
+      outputStyle: 'extended'
       cssDir: '<%=ref.dev%>'
   tmp:
     options:
+      noLineComments: true
+      outputStyle: 'compact'
       cssDir: '<%=ref.tmp%>'

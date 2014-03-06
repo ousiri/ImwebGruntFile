@@ -1,5 +1,5 @@
 module.exports = (grunt)->
-  grunt.task.registerTask 'doUsemin', (env)->
+  grunt.task.registerTask 'doUseminPrepare', (env)->
     env = env or 'dev'
     ref = grunt.config.get 'ref'
 
