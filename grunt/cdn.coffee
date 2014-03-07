@@ -4,6 +4,8 @@ module.exports = (grunt)->
 
   regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
   regCss = /url\(([^)]+)\)/ig
+  regLoadJS = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
+  regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
 
   supportedTypes =
     html: 'html',
@@ -11,7 +13,10 @@ module.exports = (grunt)->
 
   fileMap = {}
 
+
+
   processHtml = (content, filePath, options)->
+    #console.log 'options: ', options
     imgCdn = options.imgCdn or options.cdn
     jsCdn = options.jsCdn or options.cdn
     cssCdn = options.cssCdn or options.cdn
@@ -24,6 +29,7 @@ module.exports = (grunt)->
           cdn = cssCdn
         else if type.match /^(png|jpg|jpeg|gif)$/
           cdn = imgCdn
+        #console.log 'cdn debug: ', src, filePath, cdn, type
         matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
       ).replace(regCss, (matchedWord, src)->
         if src.match /\+/ #skip js script, it's just convenient
@@ -31,6 +37,18 @@ module.exports = (grunt)->
           matchedWord
         else
           matchedWord.replace src, cdnUrl.call(@, src, filePath, imgCdn);
+      ).replace(regLoadJS, (matchedWord, src)->
+        if src.match /\+/
+          console.log 'skipping', matchedWord
+          matchedWord
+        else
+          matchedWord.replace src, cdnUrl.call(@, src, filePath, jsCdn)
+      ).replace(regLoadCss, (matchedWord, src)->
+        if src.match /\+/
+          console.log 'skipping', matchedWord
+          matchedWord
+        else
+          matchedWord.replace src, cdnUrl.call(@, src, filePath, cssCdn)
       )
     content
 

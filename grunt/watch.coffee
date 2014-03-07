@@ -22,7 +22,8 @@ module.exports = (grunt)->
       grunt.task.run ['templates:dev']
     if target == 'html' or target == 'static'
       ref =  grunt.config.get 'ref'
-      destPath = filePath.replace ref.src, ref.dev
+      destPath = filePath.replace('\\', '/').replace ref.src, ref.dev
+      console.log 'watch event', filePath, destPath, ref, filePath
       if action == 'deleted'
         if grunt.file.exists destPath
           grunt.file.delete destPath
@@ -32,7 +33,7 @@ module.exports = (grunt)->
         else
           grunt.file.copy filePath, destPath
     if target == 'html'
-      grunt.task.run ['doUsemin:dev']
+      grunt.task.run ['doUseminPrepare:dev']
     grunt.task.run ['concat']
 
   options:

@@ -21,7 +21,7 @@ module.exports = (grunt)->
     console.log fileMap
     grunt.config.set 'md5Map', fileMap
 
-  grunt.task.registerTask 'doMd5', (env)->
+  grunt.task.registerTask 'doMd5', ()->
     config =
       all:
         options:

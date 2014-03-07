@@ -6,7 +6,6 @@ dev:
   - 'copy:dev'
   - 'templates:dev'
   - 'doUseminPrepare:dev'
-  #- 'useminPrepare:dev'
   - 'concat'
   - 'notify:copy'
   - 'watch'

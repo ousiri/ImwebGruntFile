@@ -16,14 +16,15 @@ module.exports = (grunt)->
       grunt.file.recurse srcPath, (absPath, rootDir, subDir, filename)->
         #console.log 'templates', absPath, rootDir, subDir, filename
         devName = subDir or 'default'
-        devPath = "#{devPath}/#{devName}.js"
-        if not tplConfig[devPath]
-          srcPath = "#{srcPath}/#{subDir||''}/*.html"
-          if not tplConfig[env]
-            tplConfig[env] = {files:{}}
-          tplConfig[env].files[devPath] = [srcPath]
-          hasTemplateFile = true
-      #console.log tplConfig
+        devFilePath = "#{devPath}/#{devName}.js"
+        #if not tplConfig[devFilePath]
+        srcFilePath = "#{srcPath}/#{subDir||''}/*.html"
+        if not tplConfig[env]
+          tplConfig[env] = {files:{}}
+        tplConfig[env].files[devFilePath] = [srcFilePath]
+        hasTemplateFile = true
+      console.log tplConfig
+      console.log tplConfig[env].files
       if hasTemplateFile
         grunt.task.loadNpmTasks 'grunt-imweb-tpl-complie'
         grunt.config.set 'tplComplie', tplConfig
