@@ -5,7 +5,7 @@ dev:
   - 'compass:dev'
   - 'copy:dev'
   - 'templates:dev'
-  - 'doUsemin:dev'
+  - 'doUseminPrepare:dev'
   #- 'useminPrepare:dev'
   - 'concat'
   - 'notify:copy'

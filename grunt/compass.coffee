@@ -3,7 +3,7 @@ module.exports =
     sassDir: '<%=ref.src%>'
   dev:
     options:
-      outputStyle: 'extended'
+      outputStyle: 'expanded'
       cssDir: '<%=ref.dev%>'
   tmp:
     options:
