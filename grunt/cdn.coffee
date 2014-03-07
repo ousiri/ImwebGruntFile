@@ -53,6 +53,7 @@ module.exports = (grunt)->
     p
 
   grunt.task.registerMultiTask 'cdn', ()->
+    #console.log @options()
     options = @options()
     files = @filesSrc
     fileMap = grunt.config.get 'md5Map'
@@ -67,7 +68,7 @@ module.exports = (grunt)->
       else if supportedTypes[type] == 'css'
         content = processCss.call @, content, rFilePath, options
       grunt.file.write filePath, content
-
+  #console.log 'grunt.config.cdnRoot', grunt.config.get 'cdnRoot'
   dist:
     options:
       cdn: 'http://test.cdn.com/test/'

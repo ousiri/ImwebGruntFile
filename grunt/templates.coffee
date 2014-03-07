@@ -1,7 +1,7 @@
 module.exports = (grunt)->
   grunt.task.registerTask 'templates', (env)->
     #console.log 'real self tasks', arguments
-    console.log 'running templates', env
+    #console.log 'running templates', env
     env = env or 'dev'
     ref = grunt.config.get 'ref'
     #console.log grunt.config.get 'tmplInline'
@@ -23,7 +23,7 @@ module.exports = (grunt)->
             tplConfig[env] = {files:{}}
           tplConfig[env].files[devPath] = [srcPath]
           hasTemplateFile = true
-      console.log tplConfig
+      #console.log tplConfig
       if hasTemplateFile
         grunt.task.loadNpmTasks 'grunt-imweb-tpl-complie'
         grunt.config.set 'tplComplie', tplConfig
