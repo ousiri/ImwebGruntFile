@@ -1,2 +1,2 @@
 console.log('b.js');
-$.http.loadScript('D.min.js');
+$.http.loadScript('js/D.min.js');
