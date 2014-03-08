@@ -21,4 +21,4 @@ dist:
   - 'usemin'
   - 'inline:dist'
   - 'doMd5'
-  - 'cdn:dist'
+  #- 'cdn:dist'

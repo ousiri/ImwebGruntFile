@@ -1,8 +1,6 @@
 .idea
 .tmp
-src
 dev
-dist
 .sass-cache
 node_modules
 proj-conf.json
