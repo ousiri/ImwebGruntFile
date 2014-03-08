@@ -22,3 +22,6 @@ dist:
   - 'inline:dist'
   - 'doMd5'
   - 'cdn:dist'
+pack:
+  - 'clean:pack'
+  - 'doPack:pack'

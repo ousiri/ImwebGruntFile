@@ -16,6 +16,8 @@
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-inline": "~0.2.2",
-    "MD5": "~1.2.0"
+    "MD5": "~1.2.0",
+    "uglify-js": "~2.4.12",
+    "cssmin": "~0.4.1"
   }
 }

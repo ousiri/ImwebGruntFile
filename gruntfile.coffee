@@ -20,6 +20,7 @@ module.exports = (grunt)->
     dev: 'dev/'
     dist: 'dist/'
     tmp: '.tmp/'
+    pack: 'pack/'
   tmplInline =
     options:
       namespace: conf.tmplInlineNamespace or 'JST'
