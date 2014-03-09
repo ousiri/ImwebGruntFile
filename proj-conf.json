@@ -1,0 +1,11 @@
+{
+    "path": "imweb/test",
+    "cdnRoot": {
+        "js": "http://1.url.cn/",
+        "css": "http://2.url.cn/",
+        "img": "http://3.url.cn/"
+    },
+    "htdocs": "http://www.qq.com/test/",
+    "src": "src/",
+    "tmplInlineNamespace": "JST"
+}

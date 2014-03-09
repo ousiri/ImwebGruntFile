@@ -21,15 +21,16 @@ module.exports = (grunt)->
     dist: 'dist/'
     tmp: '.tmp/'
     pack: 'pack/'
+    htdocs: finishWith conf.htdocs, '/'
   tmplInline =
     options:
       namespace: conf.tmplInlineNamespace or 'JST'
       processName: (filename)->
         path.basename filename, '.html'
   cdnRoot =
-    imgCdn: finishWith "#{conf.cdnRoot.img or ''}#{conf.path or ''}", '/'
-    cssCdn: finishWith "#{conf.cdnRoot.css or ''}#{conf.path or ''}/", '/'
-    jsCdn: finishWith "#{conf.cdnRoot.js or ''}#{conf.path or ''}/", '/'
+    img: finishWith "#{conf.cdnRoot.img or ''}#{conf.path or ''}", '/'
+    css: finishWith "#{conf.cdnRoot.css or ''}#{conf.path or ''}/", '/'
+    js: finishWith "#{conf.cdnRoot.js or ''}#{conf.path or ''}/", '/'
   #console.log cdn
   require('time-grunt')(grunt)
   require('load-grunt-config')(grunt, {

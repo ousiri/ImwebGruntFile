@@ -8,6 +8,7 @@ dev:
   - 'doUseminPrepare:dev'
   - 'concat'
   - 'notify:copy'
+  - 'selfExamination'
   - 'watch'
 dist:
   - 'clean:tmp'
@@ -25,3 +26,4 @@ dist:
 pack:
   - 'clean:pack'
   - 'doPack:pack'
+  - 'compress:pack'

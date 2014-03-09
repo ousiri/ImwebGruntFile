@@ -15,9 +15,9 @@ module.exports = (grunt)->
 
   processHtml = (content, filePath, options)->
     #console.log 'options: ', options
-    imgCdn = options.imgCdn or options.cdn
-    jsCdn = options.jsCdn or options.cdn
-    cssCdn = options.cssCdn or options.cdn
+    imgCdn = options.img or options.cdn
+    jsCdn = options.js or options.cdn
+    cssCdn = options.css or options.cdn
     if imgCdn and jsCdn and cssCdn
       content = content.replace(regHtml, (matchedWord, src)->
         type = path.extname(src).replace(/^\./, '')

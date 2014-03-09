@@ -5,7 +5,11 @@ fs = require 'fs'
 
 module.exports = (grunt)->
   grunt.task.registerMultiTask 'doPack', ()->
-    console.log 'doPack'
+    #console.log 'doPack'
+    options = @options()
+    ref = grunt.config.get 'ref'
+    cdnConfig = grunt.config.get 'cdn.dist.options'
+
     supportedTypes =
       html: 'html'
       css: 'css'
@@ -16,13 +20,11 @@ module.exports = (grunt)->
       jpeg: 'img'
       gif: 'img'
 
-    options = @options()
     paths =
-      img: (options.imgCdn or options.cdn or options.htdocs).replace(/https?:\/\//, '')
-      js: (options.jsCdn or options.cdn or options.htdocs).replace(/https?:\/\//, '')
-      css: (options.cssCdn or options.cdn or options.htdocs).replace(/https?:\/\//, '')
-      html: options.htdocs.replace(/https?:\/\//, '')
-    ref = grunt.config.get 'ref'
+      img: (cdnConfig.img or cdnConfig.cdn or ref.htdocs).replace(/https?:\/\//, '')
+      js: (cdnConfig.js or cdnConfig.cdn or ref.htdocs).replace(/https?:\/\//, '')
+      css: (cdnConfig.css or cdnConfig.cdn or ref.htdocs).replace(/https?:\/\//, '')
+      html: ref.htdocs.replace(/https?:\/\//, '')
     @filesSrc.forEach (filePath)->
       #console.log filePath
       type = path.extname(filePath).replace /^./, ''
@@ -35,7 +37,6 @@ module.exports = (grunt)->
         grunt.file.write targetPath, cssmin(fs.readFileSync(filePath).toString()), {encoding:'utf8'}
       else
         grunt.file.copy filePath, targetPath
-
 
   pack:
     options:
