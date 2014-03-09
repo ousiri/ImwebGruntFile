@@ -98,9 +98,16 @@ module.exports = (grunt)->
   grunt.task.registerMultiTask 'md5', ->
     options = @options()
     files = @files
+    cur = new Date()
     processImg.call @, files, options
+    imgTime = new Date()
+    console.log 'process img used: ', imgTime-cur, 'ms'
     processCss.call @, files, options
+    cssTime = new Date()
+    console.log 'process css used: ', cssTime-imgTime, 'ms'
     processJs.call @, files, options
+    jsTime = new Date()
+    console.log 'process js used: ', jsTime-cssTime, 'ms'
     grunt.config.set 'md5Map', fileMap
     console.log 'fileMap:', fileMap
 

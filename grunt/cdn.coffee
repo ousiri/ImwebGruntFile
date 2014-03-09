@@ -65,7 +65,7 @@ module.exports = (grunt)->
     #console.log 'cdnUrl: ', filePath, src, relative, fileMap[relative]
     # todo fix usemin bug
     p = path.join(cdn, fileMap[relative] or relative).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1')
-    console.log 'found a match:', src, relative.replace(/\\/g, '/'),  p
+    console.log 'found a match:', src, '->', relative.replace(/\\/g, '/'), '->',  p
     p
 
   grunt.task.registerMultiTask 'cdn', ()->
