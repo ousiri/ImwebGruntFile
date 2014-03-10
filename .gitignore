@@ -1,6 +1,7 @@
 .idea
 .tmp
 dev
+dist
 .sass-cache
 node_modules
 gruntfile_casper.js
