@@ -6,9 +6,10 @@ dev:
   - 'copy:dev'
   - 'templates:dev'
   - 'doUseminPrepare:dev'
+  - 'selfExamination'
+  - 'inlineHtml:dev'
   - 'concat'
   - 'notify:copy'
-  - 'selfExamination'
   - 'watch'
 dist:
   - 'clean:tmp'

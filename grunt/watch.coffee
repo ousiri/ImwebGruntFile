@@ -33,12 +33,13 @@ module.exports = (grunt)->
         else
           grunt.file.copy filePath, destPath
     if target == 'html'
-      grunt.task.run ['doUseminPrepare:dev']
+      grunt.task.run ['doUseminPrepare:dev', 'inlineHtml:dev']
     grunt.task.run ['concat']
 
   options:
     spawn: false
     cwd: '<%=ref.src%>'
+    debounceDelay: 750
   compass:
     files: ['**/*.scss']
     #tasks: ['compass:dev']

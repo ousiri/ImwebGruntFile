@@ -10,7 +10,7 @@ module.exports =
     }, {
       expand: true,
       cwd: '<%=ref.src%>'
-      src: ['**/*.html', '!template/**/*.html']
+      src: ['**/*.html', '!template/**/*.html', '!inline/**/*.html']
       dest: '<%=ref.dev%>'
     }, {
       expand: true,
@@ -31,7 +31,7 @@ module.exports =
     }, {
       expand: true,
       cwd: '<%=ref.src%>'
-      src: ['**/*.html', '!template/**/*.html']
+      src: ['**/*.html', '!template/**/*.html', '!inline/**/*.html']
       dest: '<%=ref.tmp%>'
     }, {
       expand: true,
@@ -52,6 +52,6 @@ module.exports =
     }, {
       expand: true,
       cwd: '<%=ref.tmp%>'
-      src: ['**/*.html', '!template/**/*.html']
+      src: ['**/*.html', '!template/**/*.html', '!inline/**/*.html']
       dest: '<%=ref.dist%>'
     }]
