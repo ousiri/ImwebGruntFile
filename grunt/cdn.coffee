@@ -6,6 +6,7 @@ module.exports = (grunt)->
   regCss = /url\(['"]?([^'")]+)['"]?\)/ig
   regLoadJS = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
   regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
+  regSkip = /\+|<%/g
 
   supportedTypes =
     html: 'html',
@@ -30,19 +31,19 @@ module.exports = (grunt)->
         #console.log 'cdn debug: ', src, filePath, cdn, type
         matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
       ).replace(regCss, (matchedWord, src)->
-        if src.match /\+/ #skip js script, it's just convenient
+        if src.match regSkip #skip js script, it's just convenient
           console.log 'skipping', matchedWord
           matchedWord
         else
           matchedWord.replace src, cdnUrl.call(@, src, filePath, imgCdn);
       ).replace(regLoadJS, (matchedWord, src)->
-        if src.match /\+/
+        if src.match regSkip
           console.log 'skipping', matchedWord
           matchedWord
         else
           matchedWord.replace src, cdnUrl.call(@, src, filePath, jsCdn)
       ).replace(regLoadCss, (matchedWord, src)->
-        if src.match /\+/
+        if src.match regSkip
           console.log 'skipping', matchedWord
           matchedWord
         else
@@ -51,7 +52,7 @@ module.exports = (grunt)->
     content
 
   processCss = (content, filePath, options) ->
-    cdn = options.imgCdn or options.cdn
+    cdn = options.img or options.cdn
     if cdn
       content = content.replace regCss, (matchedWord, src)->
         matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
@@ -88,8 +89,8 @@ module.exports = (grunt)->
   dist:
     options:
       cdn: 'http://test.cdn.com/test/'
-      imgCdn: 'http://3.cdn.com/test/'
-      jsCdn: 'http://1.cdn.com/test/'
-      cssCdn: 'http://1.cdn.com/test/'
+      img: 'http://3.cdn.com/test/'
+      js: 'http://1.cdn.com/test/'
+      css: 'http://1.cdn.com/test/'
       parentDir: '<%=ref.dist%>'
     src: ['<%=ref.dist%>**/*.*']
