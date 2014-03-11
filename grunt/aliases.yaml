@@ -6,6 +6,7 @@ dev:
   - 'copy:dev'
   - 'templates:dev'
   - 'doUseminPrepare:dev'
+  - 'filterUsemin:dev'
   - 'selfExamination'
   - 'inlineHtml:dev'
   - 'concat'
