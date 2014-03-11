@@ -19,6 +19,7 @@
     "MD5": "~1.2.0",
     "uglify-js": "~2.4.12",
     "cssmin": "~0.4.1",
-    "grunt-contrib-compress": "~0.7.0"
+    "grunt-contrib-compress": "~0.7.0",
+    "grunt-img": "~0.1.7"
   }
 }

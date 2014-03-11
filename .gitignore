@@ -4,7 +4,4 @@ dev
 dist
 .sass-cache
 node_modules
-gruntfile_casper.js
-gruntfile_simple.coffee
-grunt_simple
 pack
