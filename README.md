@@ -14,4 +14,5 @@ Commands
   dev
   dist
   pack
-  imgmin:dev or imgmin:dist
+  imgmin:dev or imgmin:src
+  smushit:dev or smushit:src

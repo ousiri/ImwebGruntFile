@@ -14,7 +14,7 @@ module.exports = (grunt)->
         grunt.task.run ['clean:template']
       hasTemplateFile = false
       grunt.file.recurse srcPath, (absPath, rootDir, subDir, filename)->
-        #console.log 'templates', absPath, rootDir, subDir, filename
+        console.log 'templates', absPath, rootDir, subDir, filename
         devName = subDir or 'default'
         devFilePath = "#{devPath}/#{devName}.js"
         #if not tplConfig[devFilePath]
@@ -24,7 +24,7 @@ module.exports = (grunt)->
         tplConfig[env].files[devFilePath] = [srcFilePath]
         hasTemplateFile = true
       console.log tplConfig
-      console.log tplConfig[env].files
+      #console.log tplConfig[env].files
       if hasTemplateFile
         grunt.task.loadNpmTasks 'grunt-imweb-tpl-complie'
         grunt.config.set 'tplComplie', tplConfig
