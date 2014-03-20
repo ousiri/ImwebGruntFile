@@ -7,5 +7,6 @@
     },
     "htdocs": "http://www.qq.com/test/",
     "src": "src/",
-    "tmplInlineNamespace": "JST"
+    "tmplInlineNamespace": "JST",
+    "packSrc": ["**/*.html", "!**/_tmp.html"]
 }

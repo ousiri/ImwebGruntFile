@@ -46,4 +46,6 @@ module.exports = (grunt)->
       cssCdn: 'http://2.cdn.com/test/'
       htdocs: 'http://www.qq.com/'
       parentDir: '<%=ref.dist%>'
-    src: ['<%=ref.dist%>**/*.*']
+    expand: true,
+    cwd: '<%=ref.dist%>'
+    src: ['**/*.*']

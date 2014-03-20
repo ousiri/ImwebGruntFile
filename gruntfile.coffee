@@ -42,5 +42,8 @@ module.exports = (grunt)->
         dist:
           options:
             cdnRoot
+      doPack:
+        pack:
+          src: conf.packSrc
     }
   })
