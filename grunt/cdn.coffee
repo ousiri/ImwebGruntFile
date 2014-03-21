@@ -110,7 +110,7 @@ module.exports = (grunt)->
     console.log 'found a match:', src, '->', relative.replace(/\\/g, '/'), '->',  p
     p
 
-  grunt.task.registerMultiTask 'cdn', ()->
+  grunt.task.registerMultiTask 'cdn', ->
     #console.log @options()
     options = @options()
     files = @filesSrc

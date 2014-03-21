@@ -2,7 +2,7 @@ path = require 'path'
 
 module.exports = (grunt)->
 
-  grunt.task.registerTask 'imgmin-clean', ()->
+  grunt.task.registerTask 'imgminClean', ()->
     cleanConf = grunt.config.get 'imgminCleanConf'
     for f in cleanConf
       if grunt.file.exists f
@@ -22,7 +22,7 @@ module.exports = (grunt)->
     grunt.config.set 'img', imgConf
     grunt.config.set 'imgminCleanConf', cleanSrc
     grunt.loadNpmTasks 'grunt-img'
-    grunt.task.run ['img', 'imgmin-clean']
+    grunt.task.run ['img', 'imgminClean']
 
   src:
     expand: true

@@ -18,6 +18,7 @@ dist:
   - 'compass:tmp'
   - 'templates:tmp'
   - 'copy:tmp'
+  - 'inlineImage:tmp'
   - 'doUseminPrepare:dist'
   - 'filterUsemin:dist'
   - 'concat'

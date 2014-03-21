@@ -21,6 +21,7 @@
     "cssmin": "~0.4.1",
     "grunt-contrib-compress": "~0.7.0",
     "grunt-img": "~0.1.7",
-    "grunt-smushit": "~1.2.0"
+    "grunt-smushit": "~1.2.0",
+    "mime": "~1.2.11"
   }
 }
