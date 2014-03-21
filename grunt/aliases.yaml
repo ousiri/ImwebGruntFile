@@ -19,6 +19,7 @@ dist:
   - 'templates:tmp'
   - 'copy:tmp'
   - 'doUseminPrepare:dist'
+  - 'filterUsemin:dist'
   - 'concat'
   - 'copy:dist'
   - 'usemin'

@@ -31,7 +31,7 @@ module.exports =
     }, {
       expand: true,
       cwd: '<%=ref.src%>'
-      src: ['**/*.html', '!template/**/*.html', '!inline/**/*.html']
+      src: ['**/*.html', '!template/**/*.html']
       dest: '<%=ref.tmp%>'
     }, {
       expand: true,

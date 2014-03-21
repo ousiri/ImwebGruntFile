@@ -11,8 +11,8 @@ For linux
 ```apt-get install opting libjpeg libjpeg-progs```
 
 Commands
-  dev
-  dist
-  pack
-  imgmin:dev or imgmin:src
-  smushit:dev or smushit:src
+- dev
+- dist
+- pack
+- imgmin:dev or imgmin:src
+- smushit:dev or smushit:src

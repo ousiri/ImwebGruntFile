@@ -4,8 +4,11 @@ module.exports = (grunt)->
     concatConfig = grunt.config.get 'concat'
     for devFile, srcFiles of concatConfig
       if devFile.match /\?|#/
-        concatConfig[devFile.replace(/\?.*$|#.*$/g, '')] = concatConfig[devFile]
+        realFile = devFile.replace(/\?.*$|#.*$/g, '')
+        if not concatConfig[realFile]
+          concatConfig[realFile] = concatConfig[devFile]
         delete concatConfig[devFile]
+    console.log concatConfig
     grunt.config.set 'concat', concatConfig
     #console.log concatConfig
   {}

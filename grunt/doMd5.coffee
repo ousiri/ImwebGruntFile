@@ -7,10 +7,11 @@ module.exports = (grunt)->
   fileMap = {}
   fileMd5Map = {}
   #regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
-  regCss = /url\(([^)]+)\)/ig
+  regCss = /:\s*url\(([^)]+)\)/ig
   regLoadJs = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
   regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
   regSkip = /\+|\<%|^https?:\/\/|^\/\/|^data:/ig
+  regParams = /(?:\?|#).*$/
 
   getMd5 = (content)->
     md5(content).substr 0, 5
@@ -38,8 +39,10 @@ module.exports = (grunt)->
           ext = []
           content.replace regCss, (matchedWord, fn)->
             if not fn.match regSkip
-              ext.push fileMap[path.relative(options.parentDir, path.join(path.dirname(src), fn))]
+              fn = fn.replace regParams, ''
+              ext.push fileMap[path.relative(options.parentDir, path.join(path.dirname(src), fn.replace(regParams, '')))]
             matchedWord
+          console.log 'css file:', src, ext
           fileMd5 = getMd5 content+ext.join('-')
           dest = path.join path.dirname(src), "#{fileMd5}_#{path.basename(src)}"
           relativePath = path.relative options.parentDir, src
@@ -59,11 +62,13 @@ module.exports = (grunt)->
           jsDeps[src] = []
           content.replace(regLoadCss, (matchedWord, fn)->
             if not fn.match regSkip
+              fn = fn.replace regParams, ''
               jsDeps[src].push fn
               needDeepProcess = true
             matchedWord
           ).replace(regLoadJs, (matchedWord, fn)->
             if not fn.match regSkip
+              fn = fn.replace regParams, ''
               jsDeps[src].push fn
               needDeepProcess = true
             matchedWord
@@ -94,6 +99,7 @@ module.exports = (grunt)->
       dest = path.join path.dirname(src), "#{fileMd5Map[relativeMap[src]]}_#{path.basename(src)}"
       fileMap[relativeMap[src]] = path.relative options.parentDir, dest
       moveFile src, dest
+    console.log 'jsDeps', jsDeps
 
   grunt.task.registerMultiTask 'md5', ->
     options = @options()
@@ -108,6 +114,7 @@ module.exports = (grunt)->
     processJs.call @, files, options
     jsTime = new Date()
     console.log 'process js used: ', jsTime-cssTime, 'ms'
+    console.log 'fileMd5Map', fileMd5Map
     grunt.config.set 'md5Map', fileMap
     console.log 'fileMap:', fileMap
 
