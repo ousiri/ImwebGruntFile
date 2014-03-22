@@ -8,5 +8,7 @@
     "htdocs": "http://www.qq.com/test/",
     "src": "src/",
     "tmplInlineNamespace": "JST",
-    "packSrc": ["**/*.html", "!**/_tmp.html"]
+    "packSrc": ["**/*.html", "!**/_tmp.html"],
+    "loadJsReg": "\\$\\.http\\.loadScript\\(([^\\)]+)\\)", // do not include quotes
+    "loadCssReg": "\\$\\.http\\.loadCss\\(([^)]+)\\)"
 }

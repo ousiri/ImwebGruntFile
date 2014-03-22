@@ -2,12 +2,12 @@ module.exports = (grunt)->
   fs = require 'fs'
   path = require 'path'
 
-  regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
-  regCss = /:\s*url\(['"]?([^'")]+)['"]?\)/ig
-  regLoadJS = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
-  regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
-  regSkip = /\+|<%/g
-  regParams = /(?:\?|#).*$/
+  #regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
+  #regCss = /:\s*url\(['"]?([^'")]+)['"]?\)/ig
+  #regLoadJS = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
+  #regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
+  #regSkip = /\+|<%/g
+  #regParams = /(?:\?|#).*$/
 
   supportedTypes =
     html: 'html',
@@ -16,14 +16,17 @@ module.exports = (grunt)->
 
   fileMap = {}
 
+  regs = {}
+
   processHtml = (content, filePath, options)->
     #console.log 'options: ', options
     imgCdn = options.img or options.cdn
     jsCdn = options.js or options.cdn
     cssCdn = options.css or options.cdn
     if imgCdn and jsCdn and cssCdn
-      content = content.replace(regHtml, (matchedWord, src)->
-        type = path.extname(src).replace(regParams, '').replace(/^\./, '')
+      #console.log content
+      content = content.replace(regs.html, (matchedWord, src)->
+        type = path.extname(src).replace(regs.params, '').replace(/^\./, '')
         if type=='js'
           cdn = jsCdn
         else if type=='css'
@@ -32,31 +35,35 @@ module.exports = (grunt)->
           cdn = imgCdn
         #console.log 'cdn debug: ', src, filePath, cdn, type
         matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
-      ).replace(regCss, (matchedWord, src)->
-        if src.match regSkip #skip js script, it's just convenient
-          console.log 'skipping', matchedWord
+      ).replace(regs.css, (matchedWord, src)->
+        if src.match regs.skip #skip js script, it's just convenient
+          console.log 'skipping', matchedWord.substr(0, 30)
           matchedWord
         else
           matchedWord.replace src, cdnUrl.call(@, src, filePath, imgCdn);
-      ).replace(regLoadJS, (matchedWord, src)->
-        if src.match regSkip
-          console.log 'skipping', matchedWord
-          matchedWord
-        else
-          matchedWord.replace src, cdnUrl.call(@, src, filePath, jsCdn)
-      ).replace(regLoadCss, (matchedWord, src)->
-        if src.match regSkip
-          console.log 'skipping', matchedWord
-          matchedWord
-        else
-          matchedWord.replace src, cdnUrl.call(@, src, filePath, cssCdn)
+      ).replace(regs.loadJs, (loadFunc, srcs)->
+        newSrcs = srcs.replace regs.extract, (srcWithQuote, src)->
+          if src.match regs.skip
+            console.log 'skipping', srcWithQuote
+            srcWithQuote
+          else
+            srcWithQuote.replace src, cdnUrl.call(@, src, filePath, jsCdn)
+        loadFunc.replace srcs, newSrcs
+      ).replace(regs.loadCss, (loadFunc, srcs)->
+        newSrcs = srcs.replace regs.extract, (srcWithQuote, src)->
+          if src.match regs.skip
+            console.log 'skipping', srcWithQuote
+            srcWithQuote
+          else
+            srcWithQuote.replace src, cdnUrl.call(@, src, filePath, cssCdn)
+        loadFunc.replace srcs, newSrcs
       )
     content
 
   processCss = (content, filePath, options) ->
     cdn = options.img or options.cdn
     if cdn
-      content = content.replace regCss, (matchedWord, src)->
+      content = content.replace regs.css, (matchedWord, src)->
         matchedWord.replace src, cdnUrl.call(@, src, filePath, cdn)
     content
 
@@ -65,18 +72,22 @@ module.exports = (grunt)->
     cssCdn = options.css or options.cdn
     parentDir = options.parentDir
     if jsCdn and cssCdn
-      content = content.replace(regLoadJS, (matchedWord, src)->
-        if src.match regSkip
-          console.log 'skipping', matchedWord
-          matchedWord
-        else
-          matchedWord.replace src, cdnUrl.call(@, src, parentDir, jsCdn)
-      ).replace(regLoadCss, (matchedWord, src)->
-        if src.match regSkip
-          console.log 'skipping', matchedWord
-          matchedWord
-        else
-          matchedWord.replace src, cdnUrl.call(@, src, parentDir, cssCdn)
+      content = content.replace(regs.loadJs, (loadFunc, srcs)->
+        newSrcs = srcs.replace regs.extract, (srcWithQuote, src)->
+          if src.match regs.skip
+            console.log 'skipping', srcWithQuote
+            srcWithQuote
+          else
+            srcWithQuote.replace src, cdnUrl.call(@, src, parentDir, jsCdn)
+        loadFunc.replace srcs, newSrcs
+      ).replace(regs.loadCss, (loadFunc, srcs)->
+        newSrcs = srcs.replace regs.extract, (srcWithQuote, src)->
+          if src.match regs.skip
+            console.log 'skipping', srcWithQuote
+            srcWithQuote
+          else
+            srcWithQuote.replace src, cdnUrl.call(@, src, parentDir, cssCdn)
+        loadFunc.replace srcs, newSrcs
       )
       ###.replace(regHtml, (matchedWord, src)->
         type = path.extname(src).replace(regParams, '').replace(/^\./, '')
@@ -99,14 +110,14 @@ module.exports = (grunt)->
 
 
   cdnUrl = (src, filePath, cdn)->
-    if src.match(/^https?:\/\//i) or src.match(/^\/\//) or src.match(/^data:/i)
-      console.log 'Skipping due to', src, 'matches absolute url'
+    if src.match regs.abs
+      console.log 'Skipping due to', src.substr(0, 50), 'matches absolute url'
       return src
     relative = path.join path.dirname(filePath), src
     #console.log 'cdnUrl: ', filePath, src, relative, fileMap[relative]
     # todo fix usemin bug
     console.log 'found a match', src, '->', relative
-    p = path.join(cdn, fileMap[relative.replace regParams, ''] or relative).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1') + (relative.match(regParams, '') or '')
+    p = path.join(cdn, fileMap[relative.replace regs.params, ''] or relative).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1') + (relative.match(regs.params, '') or '')
     console.log 'found a match:', src, '->', relative.replace(/\\/g, '/'), '->',  p
     p
 
@@ -115,6 +126,7 @@ module.exports = (grunt)->
     options = @options()
     files = @filesSrc
     fileMap = grunt.config.get 'md5Map'
+    regs = grunt.config.get 'regs'
     files.forEach (filePath)=>
       type = path.extname(filePath).replace /^./, ''
       if not supportedTypes[type]

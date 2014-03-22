@@ -7,12 +7,12 @@ module.exports = (grunt)->
   fileMap = {}
   fileMd5Map = {}
   #regHtml = /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig
-  regCss = /:\s*url\(([^)]+)\)/ig
+  ###regCss = /:\s*url\(([^)]+)\)/ig
   regLoadJs = /\$\.http\.loadScript\(['"]([^'"]+)['"]/g
   regLoadCss = /\$\.http\.loadCss\(['"]([^'"]+)['"]/g
   regSkip = /\+|\<%|^https?:\/\/|^\/\/|^data:/ig
-  regParams = /(?:\?|#).*$/
-
+  regParams = /(?:\?|#).*$/###
+  regs = {}
   getMd5 = (content)->
     md5(content).substr 0, 5
 
@@ -37,10 +37,10 @@ module.exports = (grunt)->
         if src.match /css$/
           content = fs.readFileSync(src).toString()
           ext = []
-          content.replace regCss, (matchedWord, fn)->
-            if not fn.match regSkip
-              fn = fn.replace regParams, ''
-              ext.push fileMap[path.relative(options.parentDir, path.join(path.dirname(src), fn.replace(regParams, '')))]
+          content.replace regs.css, (matchedWord, fn)->
+            if not fn.match regs.abs
+              fn = fn.replace regs.params, ''
+              ext.push fileMap[path.relative(options.parentDir, path.join(path.dirname(src), fn.replace(regs.params, '')))]
             matchedWord
           console.log 'css file:', src, ext
           fileMd5 = getMd5 content+ext.join('-')
@@ -56,25 +56,29 @@ module.exports = (grunt)->
     needDeepProcess = false
     relativeMap = {}
     files.forEach (filePair)->
-      filePair.src.forEach (src)->
-        if src.match /js$/
-          content = fs.readFileSync(src).toString()
-          jsDeps[src] = []
-          content.replace(regLoadCss, (matchedWord, fn)->
-            if not fn.match regSkip
-              fn = fn.replace regParams, ''
-              jsDeps[src].push fn
-              needDeepProcess = true
-            matchedWord
-          ).replace(regLoadJs, (matchedWord, fn)->
-            if not fn.match regSkip
-              fn = fn.replace regParams, ''
-              jsDeps[src].push fn
-              needDeepProcess = true
-            matchedWord
+      filePair.src.forEach (filePath)->
+        if filePath.match /js$/
+          content = fs.readFileSync(filePath).toString()
+          jsDeps[filePath] = []
+          content.replace(regs.loadCss, (loadFunc, srcs)->
+            srcs.replace regs.extract, (srcWithQuote, src)->
+              if not src.match regs.abs
+                src = src.replace regs.params, ''
+                jsDeps[filePath].push src
+                needDeepProcess = true
+              srcWithQuote
+            loadFunc
+          ).replace(regs.loadJs, (loadFunc, srcs)->
+            srcs.replace regs.extract, (srcWithQuote, src)->
+              if not src.match regs.abs
+                src = src.replace regs.params, ''
+                jsDeps[filePath].push src
+                needDeepProcess = true
+              srcWithQuote
+            loadFunc
           )
-          contents[src] = content
-          relativeMap[src] = path.relative options.parentDir, src
+          contents[filePath] = content
+          relativeMap[filePath] = path.relative options.parentDir, filePath
     for src, content of contents
       fileMd5Map[relativeMap[src]] = getMd5 content
     #console.log 'fileMd5Map', fileMd5Map
@@ -105,6 +109,7 @@ module.exports = (grunt)->
     options = @options()
     files = @files
     cur = new Date()
+    regs = grunt.config.get 'regs'
     processImg.call @, files, options
     imgTime = new Date()
     console.log 'process img used: ', imgTime-cur, 'ms'

@@ -45,5 +45,15 @@ module.exports = (grunt)->
       doPack:
         pack:
           src: conf.packSrc
+      regs:
+        loadJs: if conf.loadJsReg then new RegExp(conf.loadJsReg, "g") else /\$\.http\.loadScript\(([^)]+)\)/g
+        loadCss: if conf.loadJsReg then new RegExp(conf.loadCssReg, "g") else /\$\.http\.loadCss\(([^)]+)\)/g
+        extract: /['"]([^'"]+)['"]/g # deep extraction for multiple file reference
+        html: /<(?:img|link|script)[^>]*\s(?:href|src)=['"]([^'"]+)['"][^>]*\/?>/ig # find reference for html
+        css: /:\s*url\(['"]?([^'")]+)['"]?\)/ig # find css reference
+        abs: /\+|\<%|^https?:\/\/|^\/\/|^data:/ig # absolute url
+        skip: /\+|<%/g # prevent template render replacement
+        params: /(?:\?|#).*$/ # get and hash params
+
     }
   })
