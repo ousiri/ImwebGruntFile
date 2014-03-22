@@ -22,6 +22,7 @@
     "grunt-contrib-compress": "~0.7.0",
     "grunt-img": "~0.1.7",
     "grunt-smushit": "~1.2.0",
-    "mime": "~1.2.11"
+    "mime": "~1.2.11",
+    "grunt-shell": "~0.6.4"
   }
 }

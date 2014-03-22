@@ -31,3 +31,8 @@ pack:
   - 'clean:pack'
   - 'doPack:pack'
   - 'compress:pack'
+update:
+  - 'clean:update'
+  - 'shell:npmUpdate'
+  - 'copy:update'
+  - 'shell:npmInstall'
