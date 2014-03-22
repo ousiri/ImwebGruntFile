@@ -54,6 +54,6 @@ module.exports = (grunt)->
         abs: /\+|\<%|^https?:\/\/|^\/\/|^data:/ig # absolute url
         skip: /\+|<%/g # prevent template render replacement
         params: /(?:\?|#).*$/ # get and hash params
-
+      disabledFeatures: conf.disabledFeatures or []
     }
   })

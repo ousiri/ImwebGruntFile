@@ -40,7 +40,8 @@ module.exports = (grunt)->
           content.replace regs.css, (matchedWord, fn)->
             if not fn.match regs.abs
               fn = fn.replace regs.params, ''
-              ext.push fileMap[path.relative(options.parentDir, path.join(path.dirname(src), fn.replace(regs.params, '')))]
+              relativePath = path.relative(options.parentDir, path.join(path.dirname(src), fn.replace(regs.params, '')))
+              ext.push fileMap[relativePath] or relativePath
             matchedWord
           console.log 'css file:', src, ext
           fileMd5 = getMd5 content+ext.join('-')
@@ -110,12 +111,14 @@ module.exports = (grunt)->
     files = @files
     cur = new Date()
     regs = grunt.config.get 'regs'
-    processImg.call @, files, options
-    imgTime = new Date()
-    console.log 'process img used: ', imgTime-cur, 'ms'
+    disabledFeatures = grunt.config.get 'disabledFeatures'
+    if disabledFeatures.indexOf("imageMd5") == -1
+      processImg.call @, files, options
+      imgTime = new Date()
+      console.log 'process img used: ', imgTime-cur, 'ms'
     processCss.call @, files, options
     cssTime = new Date()
-    console.log 'process css used: ', cssTime-imgTime, 'ms'
+    console.log 'process css used: ', cssTime-(imgTime or cur), 'ms'
     processJs.call @, files, options
     jsTime = new Date()
     console.log 'process js used: ', jsTime-cssTime, 'ms'

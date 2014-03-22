@@ -18,6 +18,8 @@ module.exports = (grunt)->
 
   regs = {}
 
+  disabledFeatures = false
+
   processHtml = (content, filePath, options)->
     #console.log 'options: ', options
     imgCdn = options.img or options.cdn
@@ -114,10 +116,11 @@ module.exports = (grunt)->
       console.log 'Skipping due to', src.substr(0, 50), 'matches absolute url'
       return src
     relative = path.join path.dirname(filePath), src
+    filename = relative.replace regs.params, ''
     #console.log 'cdnUrl: ', filePath, src, relative, fileMap[relative]
     # todo fix usemin bug
-    console.log 'found a match', src, '->', relative
-    p = path.join(cdn, fileMap[relative.replace regs.params, ''] or relative).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1') + (relative.match(regs.params, '') or '')
+    #console.log 'found a match', src, '->', relative
+    p = path.join(cdn, fileMap[filename] or filename).replace(/\\/g, '/').replace(/:\/(\w)/, '://$1') + (relative.match(regs.params) or [''])[0]
     console.log 'found a match:', src, '->', relative.replace(/\\/g, '/'), '->',  p
     p
 
@@ -127,6 +130,8 @@ module.exports = (grunt)->
     files = @filesSrc
     fileMap = grunt.config.get 'md5Map'
     regs = grunt.config.get 'regs'
+    disabledFeatures = grunt.config.get 'disabledFeatures'
+    disabledImageMd5 = disabledFeatures.indexOf("imageMd5") != -1
     files.forEach (filePath)=>
       type = path.extname(filePath).replace /^./, ''
       if not supportedTypes[type]

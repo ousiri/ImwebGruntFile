@@ -11,4 +11,5 @@
     "packSrc": ["**/*.html", "!**/_tmp.html"],
     "loadJsReg": "\\$\\.http\\.loadScript\\(([^\\)]+)\\)", // do not include quotes
     "loadCssReg": "\\$\\.http\\.loadCss\\(([^)]+)\\)"
+    , "disabledFeatures": [] // currently support imageMd5
 }
