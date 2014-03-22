@@ -7,3 +7,7 @@ module.exports = ->
     command: 'npm update'
     options:
       stdout: true
+  npmInstallImwebGruntFile:
+    command: 'npm install imweb-gruntfile'
+    options:
+      stdout: true

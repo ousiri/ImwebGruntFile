@@ -16,6 +16,7 @@ For linux
 - pack
 - imgmin:dev or imgmin:src
 - smushit:dev or smushit:src
+- update
 
 ### Project Configure
 

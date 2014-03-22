@@ -33,6 +33,7 @@ pack:
   - 'compress:pack'
 update:
   - 'clean:update'
-  - 'shell:npmUpdate'
+  - 'shell:npmInstallImwebGruntFile'
+  #- 'shell:npmUpdate'
   - 'copy:update'
   - 'shell:npmInstall'

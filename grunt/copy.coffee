@@ -60,6 +60,7 @@ module.exports =
       src: ['node_modules/imweb-gruntfile/grunt/*.*']
       dest: 'grunt/'
       flatten: true
+      expand: true
     }, {
       src: ['node_modules/imweb-gruntfile/gruntfile.coffee']
       dest: 'gruntfile.coffee'
